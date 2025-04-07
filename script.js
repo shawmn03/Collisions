@@ -51,8 +51,8 @@ class Turtle {
   }
 }
 
-let turtle1 = new Turtle(200, 300, 'turtle1.png'); 
-let turtle2 = new Turtle(600, 300, 'turtle2.png'); 
+let turtle1 = new Turtle(200, 300, 'turtle.png'); 
+let turtle2 = new Turtle(600, 300, 'turtle.png'); 
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'w') turtle1.move('up');
