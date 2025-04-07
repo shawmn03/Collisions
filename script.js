@@ -2,24 +2,23 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 class Turtle {
-  constructor(x, y, color) {
+  constructor(x, y, imageSrc) {
     this.x = x;
     this.y = y;
-    this.radius = 20;
-    this.angle = 0; 
+    this.width = 50;  
+    this.height = 50; 
+    this.image = new Image();
+    this.image.src = imageSrc;
+    this.angle = 0;
     this.speed = 8;
-    this.color = color;
-    this.isSpinning = false; 
+    this.isSpinning = false;
   }
 
   draw() {
     ctx.save();
     ctx.translate(this.x, this.y);
     ctx.rotate(this.angle);
-    ctx.fillStyle = this.color;
-    ctx.beginPath();
-    ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.drawImage(this.image, -this.width / 2, -this.height / 2, this.width, this.height);
     ctx.restore();
   }
 
@@ -35,19 +34,25 @@ class Turtle {
   }
 
   collisionDetection(otherTurtle) {
-    const dx = this.x - otherTurtle.x;
-    const dy = this.y - otherTurtle.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
+    const thisLeft = this.x - this.width / 2;
+    const thisRight = this.x + this.width / 2;
+    const thisTop = this.y - this.height / 2;
+    const thisBottom = this.y + this.height / 2;
 
-    if (distance < this.radius + otherTurtle.radius) {
-      this.isSpinning = true; 
+    const otherLeft = otherTurtle.x - otherTurtle.width / 2;
+    const otherRight = otherTurtle.x + otherTurtle.width / 2;
+    const otherTop = otherTurtle.y - otherTurtle.height / 2;
+    const otherBottom = otherTurtle.y + otherTurtle.height / 2;
+
+    if (thisRight > otherLeft && thisLeft < otherRight && thisBottom > otherTop && thisTop < otherBottom) {
+      this.isSpinning = true;
       otherTurtle.isSpinning = true;
     }
   }
 }
 
-let turtle1 = new Turtle(200, 300, 'green');
-let turtle2 = new Turtle(600, 300, 'blue');
+let turtle1 = new Turtle(200, 300, 'turtle1.png'); 
+let turtle2 = new Turtle(600, 300, 'turtle2.png'); 
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'w') turtle1.move('up');
